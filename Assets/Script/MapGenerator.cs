@@ -4,47 +4,21 @@ using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
 {
-    //put in a struct
-    public int mapWidth;
-    public int mapHeight;
-    public float noiseScale;
+    
     public bool autoUpdate;
+    //public int seed { get { return values.seed; } set {  values.seed = value; } }
 
-    public int octaves;
-    [Range(0f, 1f)]
-    public float persistance;
-    public float lacunarity;
-
-    public int seed;
-    public Vector2 offset;
-    public void GenerateMap()
+    public Texture2D GenerateMap(int resolution, int seed, float noiseScale, int octaves, float persistance, float lacunarity, Vector2 offset)
     {
-        float[,] noiseMap = Noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistance, lacunarity, offset);
+        Texture2D noiseTexture;
+        float[,] noiseMap = Noise.GenerateNoiseMap(resolution, seed, noiseScale, octaves, persistance, lacunarity, offset);
 
         MapDisplay display = FindObjectOfType<MapDisplay>();
-        display.DrawNoiseMap(noiseMap);
+        noiseTexture = display.DrawNoiseMap(noiseMap);
+        return noiseTexture;
+      
     }
 
-    private void OnValidate()
-    {
-        if (mapWidth < 1)
-        {
-            mapWidth = 1;
-        }
-
-        if (mapHeight < 1)
-        {
-            mapHeight = 1;
-        }
-
-        if(lacunarity  < 1)
-        {
-            lacunarity = 1;
-        }
-
-        if(octaves < 0)
-        {
-            octaves = 0;
-        }
-    }
+    
+    
 }

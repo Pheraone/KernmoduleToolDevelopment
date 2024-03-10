@@ -6,7 +6,7 @@ public class MapDisplay : MonoBehaviour
 {
     public Renderer textureRenderer;
 
-    public void DrawNoiseMap(float[,] noiseMap)
+    public Texture2D DrawNoiseMap(float[,] noiseMap)
     {
         int width = noiseMap.GetLength(0);
         int height = noiseMap.GetLength(1);
@@ -22,16 +22,19 @@ public class MapDisplay : MonoBehaviour
             }
         }
         texture.SetPixels(colorMap);
-        texture.Apply();
-
-        //in editor
-        textureRenderer.sharedMaterial.mainTexture = texture;
-
-        /*
-        In Runtime
         textureRenderer.material.mainTexture = texture;
-        */
+        texture.Apply();
+        
+        return texture;
 
-        textureRenderer.transform.localScale = new Vector3(width, 1, height);
+        ////in editor
+        //texturerenderer.sharedmaterial.maintexture = texture;
+
+        ///*
+        //in runtime
+        
+        //*/
+
+        //texturerenderer.transform.localscale = new vector3(width, 1, height);
     }
 }

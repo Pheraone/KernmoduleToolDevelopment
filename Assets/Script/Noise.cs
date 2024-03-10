@@ -5,11 +5,9 @@ using UnityEngine;
 public static class Noise
 {
 
-    public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, Vector2 offset)
+    public static float[,] GenerateNoiseMap(int resolution, int seed, float scale, int octaves, float persistance, float lacunarity, Vector2 offset)
     {
-        //TO DO: fix non uniform scaling in a more sophisticated way
-        //mapHeight = mapWidth;
-        float[,] noiseMap = new float[mapWidth, mapHeight];
+        float[,] noiseMap = new float[resolution, resolution];
 
         System.Random rand = new System.Random(seed);
         Vector2[] octaveOffsets = new Vector2[octaves];
@@ -30,12 +28,11 @@ public static class Noise
         float maxNoiseHeight = float.MinValue;
         float minNoiseHeight = float.MaxValue;
 
-        float halfWidth = mapWidth / 2;
-        float halfHeight = mapHeight / 2;     
+        float resolutionHalf = resolution / 2;    
         
-        for(int y = 0; y < mapHeight; y++)
+        for(int y = 0; y < resolution; y++)
         {
-            for(int x = 0; x < mapWidth; x++)
+            for(int x = 0; x < resolution; x++)
             {
                 float amplitude = 1;
                 float frequency = 1;
@@ -43,8 +40,8 @@ public static class Noise
 
                 for(int i = 0; i < octaves; i++)
                 {
-                    float sampleX = (x-halfWidth) / scale * frequency + octaveOffsets[i].x;
-                    float sampleY = (y-halfHeight) / scale * frequency + octaveOffsets[i].y;
+                    float sampleX = (x- resolutionHalf) / scale * frequency + octaveOffsets[i].x;
+                    float sampleY = (y- resolutionHalf) / scale * frequency + octaveOffsets[i].y;
 
                     float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2 - 1;
                     noiseMap[x, y] = perlinValue;
@@ -68,9 +65,9 @@ public static class Noise
             }
         }
 
-        for (int y = 0; y < mapHeight; y++)
+        for (int y = 0; y < resolution; y++)
         {
-            for (int x = 0; x < mapWidth; x++)
+            for (int x = 0; x < resolution; x++)
             {
                 noiseMap[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, noiseMap[x, y]);
 
