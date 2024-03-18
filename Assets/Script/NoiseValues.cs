@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public struct Values
+public class NoiseValues
 {
     //put in a struct
    public int resolution;

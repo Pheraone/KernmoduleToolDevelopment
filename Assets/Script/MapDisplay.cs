@@ -32,7 +32,7 @@ public class MapDisplay : MonoBehaviour
 
         ///*
         //in runtime
-        
+        //textureRenderer.material.mainTexture = texture;
         //*/
 
         //texturerenderer.transform.localscale = new vector3(width, 1, height);
