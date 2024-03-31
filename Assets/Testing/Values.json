@@ -1,1 +1,1 @@
-{"resolution":41,"noiseScale":100.0,"octaves":10,"persistance":1.0,"lacunarity":4.0,"seed":72,"offset":{"x":300.0,"y":68.0}}
+{"resolution":200,"noiseScale":2.0,"octaves":80,"persistance":0.0,"lacunarity":1.0,"seed":72,"offset":{"x":2.0,"y":6.0}}

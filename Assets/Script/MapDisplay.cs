@@ -27,14 +27,5 @@ public class MapDisplay : MonoBehaviour
         
         return texture;
 
-        ////in editor
-        //texturerenderer.sharedmaterial.maintexture = texture;
-
-        ///*
-        //in runtime
-        //textureRenderer.material.mainTexture = texture;
-        //*/
-
-        //texturerenderer.transform.localscale = new vector3(width, 1, height);
     }
 }

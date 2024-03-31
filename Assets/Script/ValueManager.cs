@@ -6,10 +6,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ValueSetter : MonoBehaviour {
+public class ValueManager : MonoBehaviour {
 
     [SerializeField] private ValueHolder valueHolder;
     public string path = "Assets/Testing/Values.json";
+    public string pathPNG = "Assets/Testing/Values.png";
 
     public TMP_InputField inResolution;
     public TMP_InputField inNoiseScale;
@@ -20,13 +21,16 @@ public class ValueSetter : MonoBehaviour {
     public TMP_InputField inOffsetX;
     public TMP_InputField inOffsetY;
     public TMP_InputField inPath;
+    public TMP_InputField inPathPNG;
 
 
     public Image img;
 
     public ValueHolder ValueHolder { get => valueHolder; set => valueHolder = value; }
     public NoiseTextureGenerator noiseTextureGenerator;
- 
+
+    private UndoRedoManager undoRedoManager = new UndoRedoManager();
+
     private void OnValuesChanged( )
     {
         inResolution.text = ValueHolder.Values.resolution.ToString();
@@ -38,12 +42,7 @@ public class ValueSetter : MonoBehaviour {
         inOffsetY.text = ValueHolder.Values.offset.y.ToString();
     }
 
-    //TEST
-    //public void SetIntValue(TMP_InputField inputField, Values value) 
-    //{
-    //    var a = inputField.text;
-    //    values.values = int.Parse( a );
-    //}
+    //If the value of the textfield is different from the value in the valueholder it will be adjusted to the right value
     public void DataChanged()
     {
         if (ValueHolder.Values.resolution.ToString() != inResolution.text)
@@ -78,12 +77,18 @@ public class ValueSetter : MonoBehaviour {
         {
             inOffsetY.text = ValueHolder.Values.offset.y.ToString();
         }
+        SetImage();
     }
 
     public void SetPath()
     {
         var a = inPath.text;
         path = inPath.text;
+    } 
+    public void SetPathPNG()
+    {
+        var a = inPathPNG.text;
+        pathPNG = inPathPNG.text;
     }
 
     [Button("SET TEXTURE")]
@@ -97,46 +102,87 @@ public class ValueSetter : MonoBehaviour {
 
     public void SetResolution()
     {
+       StorePreviousState();
         var a = inResolution.text;
         ValueHolder.Values.resolution = int.Parse(a);
+        SetImage();
     }
 
     public void SetNoiseScale()
     {
-        var b = inNoiseScale.text;
-        ValueHolder.Values.noiseScale = float.Parse(b);
+        StorePreviousState();
+        var a = inNoiseScale.text;
+        ValueHolder.Values.noiseScale = float.Parse(a);
+        SetImage();
     }
 
     public void SetSeed()
     {
-        var c = inSeed.text;
-        ValueHolder.Values.seed = int.Parse(c);
+        StorePreviousState();
+        var a = inSeed.text;
+        ValueHolder.Values.seed = int.Parse(a);
+        SetImage();
     }
    
     public void SetOctaves()
     {
-        var c = inOctaves.text;
-        ValueHolder.Values.octaves = int.Parse(c);
+        StorePreviousState();
+        var a = inOctaves.text;
+        ValueHolder.Values.octaves = int.Parse(a);
+        SetImage();
     }
     public void SetLacunarity()
     {
-        var c = inLacunarity.text;
-        ValueHolder.Values.lacunarity = int.Parse(c);
+        StorePreviousState();
+        var a = inLacunarity.text;
+        ValueHolder.Values.lacunarity = int.Parse(a);
+        SetImage();
     }
 
     public void SetPersistance()
     {
-        var c = inPersistance.text;
-        ValueHolder.Values.persistance = int.Parse(c);
+        StorePreviousState();
+        var a = inPersistance.text;
+        ValueHolder.Values.persistance = int.Parse(a);
+        SetImage();
     }
      public void SetOffsetX()
     {
-        var c = inOffsetX.text;
-        ValueHolder.Values.offset.x = int.Parse(c);
+        StorePreviousState();
+        var a = inOffsetX.text;
+        ValueHolder.Values.offset.x = int.Parse(a);
+        SetImage();
     }
     public void SetOffsetY()
     {
-        var c = inOffsetY.text;
-        ValueHolder.Values.offset.y = int.Parse(c);
+        StorePreviousState();
+        var a = inOffsetY.text;
+        ValueHolder.Values.offset.y = int.Parse(a);
+        SetImage();
+    }
+   
+    public void Undo()
+    {
+        NoiseValues previousValues = undoRedoManager.Undo(ValueHolder.Values);
+        ApplyValues(previousValues);
+    }
+
+    public void Redo()
+    {
+        NoiseValues nextValues = undoRedoManager.Redo(ValueHolder.Values);
+        ApplyValues(nextValues);
+    }
+
+
+    private void ApplyValues(NoiseValues updated)
+    {
+        ValueHolder.Values = updated;
+        SetImage();
+        DataChanged();
+    }
+
+    private void StorePreviousState()
+    {
+        undoRedoManager.StorePreviousState(ValueHolder.Values);
     }
 }

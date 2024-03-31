@@ -6,12 +6,11 @@ using System.IO;
 public class ExportManager : MonoBehaviour
 {
 
-    //[Button("EXPORT TEXTURE")]
-    public void ExportImage(ValueSetter setter)
+    public void ExportImage(ValueManager setter)
     {
         var holder = setter.ValueHolder;
 
         byte[] bytes = holder.texture.EncodeToPNG();
-        File.WriteAllBytes(setter.path, bytes);
+        File.WriteAllBytes(setter.pathPNG, bytes);
     }
 }

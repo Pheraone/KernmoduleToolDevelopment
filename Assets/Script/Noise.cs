@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class Noise
 {
-
+    //Code by Sebastian Lague
     public static float[,] GenerateNoiseMap(int resolution, int seed, float scale, int octaves, float persistance, float lacunarity, Vector2 offset)
     {
         float[,] noiseMap = new float[resolution, resolution];
