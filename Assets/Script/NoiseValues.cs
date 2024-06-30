@@ -1,14 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class NoiseValues
+public class NoiseValues : ICloneable
 {
-   public int resolution;
+    public int resolution;
     public float noiseScale;
- 
-
     public int octaves;
     [Range(0f, 1f)]
     public float persistance;
@@ -16,20 +15,22 @@ public class NoiseValues
 
     public int seed;
     public Vector2 offset;
+    object ICloneable.Clone()
+    {
+        return new NoiseValues
+        {
+            resolution = this.resolution,
+            noiseScale = this.noiseScale,
+            octaves = this.octaves,
+            persistance = this.persistance,
+            lacunarity = this.lacunarity,
+            seed = this.seed,
+            offset = this.offset
+        };
+    }
 
     public NoiseValues Clone()
     {
-        NoiseValues clone = new NoiseValues();
-
-        clone.resolution = this.resolution;
-        clone.noiseScale = this.noiseScale;
-        clone.octaves = this.octaves;
-        clone.persistance = this.persistance;
-        clone.lacunarity = this.lacunarity;
-        clone.seed = this.seed;
-        clone.offset = this.offset;
-
-        return clone;
+        return (NoiseValues)((ICloneable)this).Clone();
     }
-
 }

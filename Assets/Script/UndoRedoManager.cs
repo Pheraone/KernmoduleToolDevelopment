@@ -9,8 +9,8 @@ public class UndoRedoManager
 
     public void StorePreviousState(NoiseValues values)
     {
-        // Clone the current state
-        NoiseValues clonedValues = values.Clone();
+        // Use ICloneable's Clone method
+        NoiseValues clonedValues = (NoiseValues)values.Clone();
 
         // Push the cloned state onto the undoStack
         undoStack.Push(clonedValues);
@@ -34,7 +34,7 @@ public class UndoRedoManager
         if (CanUndo())
         {
             NoiseValues previousValues = undoStack.Pop();
-            redoStack.Push(currentValue);
+            redoStack.Push((NoiseValues)currentValue.Clone());
             return previousValues;
         }
         else
@@ -48,7 +48,7 @@ public class UndoRedoManager
         if (CanRedo())
         {
             NoiseValues nextValues = redoStack.Pop();
-            undoStack.Push(currentValue);
+            undoStack.Push((NoiseValues)currentValue.Clone());
             return nextValues;
         }
         else

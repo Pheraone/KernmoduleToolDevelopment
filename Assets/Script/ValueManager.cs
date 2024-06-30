@@ -16,7 +16,7 @@ public class ValueManager : MonoBehaviour {
     public TMP_InputField inNoiseScale;
     public TMP_InputField inSeed;
     public TMP_InputField inOctaves;
-    public TMP_InputField inPersistance;
+    public Slider inPersistance;
     public TMP_InputField inLacunarity;
     public TMP_InputField inOffsetX;
     public TMP_InputField inOffsetY;
@@ -31,15 +31,19 @@ public class ValueManager : MonoBehaviour {
 
     private UndoRedoManager undoRedoManager = new UndoRedoManager();
 
-    private void OnValuesChanged( )
+    public void Start()
     {
-        inResolution.text = ValueHolder.Values.resolution.ToString();
-        inNoiseScale.text = ValueHolder.Values.noiseScale.ToString();
-        inSeed.text = ValueHolder.Values.seed.ToString();
-        inPersistance.text = ValueHolder.Values.persistance.ToString();
-        inLacunarity.text = ValueHolder.Values.lacunarity.ToString();
-        inOffsetX.text = ValueHolder.Values.offset.x.ToString();
-        inOffsetY.text = ValueHolder.Values.offset.y.ToString();
+        valueHolder.Values = new NoiseValues()
+        {
+            resolution = 50,
+            noiseScale = 3.33f,
+            seed = Random.Range(1, 1000),
+            octaves = 72,
+            persistance = 0.22f,
+            lacunarity = 2.5f
+        };
+
+        DataChanged();
     }
 
     //If the value of the textfield is different from the value in the valueholder it will be adjusted to the right value
@@ -61,9 +65,9 @@ public class ValueManager : MonoBehaviour {
         {
             inOctaves.text = ValueHolder.Values.octaves.ToString();
         } 
-        if (ValueHolder.Values.persistance.ToString() != inPersistance.text)
+        if (ValueHolder.Values.persistance != inPersistance.value)
         {
-            inPersistance.text = ValueHolder.Values.persistance.ToString();
+            inPersistance.value = ValueHolder.Values.persistance;
         }
         if (ValueHolder.Values.lacunarity.ToString() != inLacunarity.text)
         {
@@ -135,15 +139,15 @@ public class ValueManager : MonoBehaviour {
     {
         StorePreviousState();
         var a = inLacunarity.text;
-        ValueHolder.Values.lacunarity = int.Parse(a);
+        ValueHolder.Values.lacunarity = float.Parse(a);
         SetImage();
     }
 
     public void SetPersistance()
     {
         StorePreviousState();
-        var a = inPersistance.text;
-        ValueHolder.Values.persistance = int.Parse(a);
+        var a = inPersistance.value;
+        ValueHolder.Values.persistance = a;
         SetImage();
     }
      public void SetOffsetX()
